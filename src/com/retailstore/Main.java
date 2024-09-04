@@ -1,13 +1,21 @@
 package com.retailstore;
 
+import com.retailstore.model.Product;
+import com.retailstore.model.Customer;
+import com.retailstore.model.Review;
+import com.retailstore.service.ProductService;
+import com.retailstore.service.CustomerService;
+import com.retailstore.service.ReviewService;
+
+import java.sql.Date;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        Product productManager = new Product();
-        Customer customerManager = new Customer();
-        Review reviewManager = new Review();
+        ProductService productService = new ProductService();
+        CustomerService customerService = new CustomerService();
+        ReviewService reviewService = new ReviewService();
 
         while (true) {
             System.out.println("Welcome to the Online Retail Store Management System");
@@ -22,13 +30,13 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    productMenu(productManager);
+                    productMenu(scanner, productService);
                     break;
                 case 2:
-                    customerMenu(customerManager);
+                    customerMenu(scanner, customerService);
                     break;
                 case 3:
-                    reviewMenu(reviewManager);
+                    reviewMenu(scanner, reviewService);
                     break;
                 case 4:
                     System.out.println("Thank you for using the Online Retail Store Management System. Goodbye!");
@@ -41,9 +49,7 @@ public class Main {
         }
     }
 
-    private static void productMenu(Product productManager) {
-        Scanner scanner = new Scanner(System.in);
-
+    private static void productMenu(Scanner scanner, ProductService productService) {
         while (true) {
             System.out.println("Product Management:");
             System.out.println("1. Add Product");
@@ -57,16 +63,51 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    productManager.addProduct();
+                    Product product = new Product();
+                    scanner.nextLine(); // consume newline
+
+                    System.out.print("Enter product name: ");
+                    product.setName(scanner.nextLine());
+
+                    System.out.print("Enter product description: ");
+                    product.setDescription(scanner.nextLine());
+
+                    System.out.print("Enter product price: ");
+                    product.setPrice(scanner.nextDouble());
+
+                    System.out.print("Enter stock quantity: ");
+                    product.setStockQuantity(scanner.nextInt());
+
+                    productService.addProduct(product);
                     break;
                 case 2:
-                    productManager.viewProduct();
+                    productService.viewProducts();
                     break;
                 case 3:
-                    productManager.updateProduct();
+                    Product updateProduct = new Product();
+
+                    System.out.print("Enter product ID to update: ");
+                    updateProduct.setProductId(scanner.nextInt());
+                    scanner.nextLine(); // consume newline
+
+                    System.out.print("Enter new product name: ");
+                    updateProduct.setName(scanner.nextLine());
+
+                    System.out.print("Enter new product description: ");
+                    updateProduct.setDescription(scanner.nextLine());
+
+                    System.out.print("Enter new product price: ");
+                    updateProduct.setPrice(scanner.nextDouble());
+
+                    System.out.print("Enter new stock quantity: ");
+                    updateProduct.setStockQuantity(scanner.nextInt());
+
+                    productService.updateProduct(updateProduct);
                     break;
                 case 4:
-                    productManager.deleteProduct();
+                    System.out.print("Enter product ID to delete: ");
+                    int productId = scanner.nextInt();
+                    productService.deleteProduct(productId);
                     break;
                 case 5:
                     return;
@@ -76,9 +117,7 @@ public class Main {
         }
     }
 
-    private static void customerMenu(Customer customerManager) {
-        Scanner scanner = new Scanner(System.in);
-
+    private static void customerMenu(Scanner scanner, CustomerService customerService) {
         while (true) {
             System.out.println("Customer Management:");
             System.out.println("1. Add Customer");
@@ -92,16 +131,51 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    customerManager.addCustomer();
+                    Customer customer = new Customer();
+                    scanner.nextLine(); // consume newline
+
+                    System.out.print("Enter customer name: ");
+                    customer.setName(scanner.nextLine());
+
+                    System.out.print("Enter customer email: ");
+                    customer.setEmail(scanner.nextLine());
+
+                    System.out.print("Enter customer phone number: ");
+                    customer.setPhoneNumber(scanner.nextLine());
+
+                    System.out.print("Enter customer address: ");
+                    customer.setAddress(scanner.nextLine());
+
+                    customerService.addCustomer(customer);
                     break;
                 case 2:
-                    customerManager.viewCustomer();
+                    customerService.viewCustomers();
                     break;
                 case 3:
-                    customerManager.updateCustomer();
+                    Customer updateCustomer = new Customer();
+
+                    System.out.print("Enter customer ID to update: ");
+                    updateCustomer.setCustomerId(scanner.nextInt());
+                    scanner.nextLine(); // consume newline
+
+                    System.out.print("Enter new customer name: ");
+                    updateCustomer.setName(scanner.nextLine());
+
+                    System.out.print("Enter new customer email: ");
+                    updateCustomer.setEmail(scanner.nextLine());
+
+                    System.out.print("Enter new customer phone number: ");
+                    updateCustomer.setPhoneNumber(scanner.nextLine());
+
+                    System.out.print("Enter new customer address: ");
+                    updateCustomer.setAddress(scanner.nextLine());
+
+                    customerService.updateCustomer(updateCustomer);
                     break;
                 case 4:
-                    customerManager.deleteCustomer();
+                    System.out.print("Enter customer ID to delete: ");
+                    int customerId = scanner.nextInt();
+                    customerService.deleteCustomer(customerId);
                     break;
                 case 5:
                     return;
@@ -111,9 +185,7 @@ public class Main {
         }
     }
 
-    private static void reviewMenu(Review reviewManager) {
-        Scanner scanner = new Scanner(System.in);
-
+    private static void reviewMenu(Scanner scanner, ReviewService reviewService) {
         while (true) {
             System.out.println("Review Management:");
             System.out.println("1. Add Review");
@@ -126,13 +198,35 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    reviewManager.addReview();
+                    Review review = new Review();
+                    scanner.nextLine(); // consume newline
+
+                    System.out.print("Enter product ID: ");
+                    review.setProductId(scanner.nextInt());
+
+                    System.out.print("Enter customer ID: ");
+                    review.setCustomerId(scanner.nextInt());
+
+                    System.out.print("Enter rating (1-5): ");
+                    review.setRating(scanner.nextInt());
+                    scanner.nextLine(); // consume newline
+
+                    System.out.print("Enter comment: ");
+                    review.setComment(scanner.nextLine());
+
+                    review.setReviewDate(new Date(System.currentTimeMillis())); // Set current date as review date
+
+                    reviewService.addReview(review);
                     break;
                 case 2:
-                    reviewManager.viewReviews();
+                    System.out.print("Enter product ID to view reviews: ");
+                    int productId = scanner.nextInt();
+                    reviewService.viewReviews(productId);
                     break;
                 case 3:
-                    reviewManager.deleteReview();
+                    System.out.print("Enter review ID to delete: ");
+                    int reviewId = scanner.nextInt();
+                    reviewService.deleteReview(reviewId);
                     break;
                 case 4:
                     return;
